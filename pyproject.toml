@@ -1,0 +1,31 @@
+[project]
+name = "enterprise_incident_intelligence_resolution_system"
+version = "0.1.0"
+description = "Multi-agent CrewAI system for IT incident triage, log analysis, RCA, and executive PDF reporting"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "contextual-client",
+    "crewai[file-processing,google-genai,litellm,tools]==1.15.0",
+    "exa-py",
+    "google-generativeai>=0.8.6",
+    "xhtml2pdf>=0.2.17",
+]
+
+[project.scripts]
+enterprise_incident_intelligence_resolution_system = "enterprise_incident_intelligence_resolution_system.main:run"
+run_crew = "enterprise_incident_intelligence_resolution_system.main:run"
+train = "enterprise_incident_intelligence_resolution_system.main:train"
+replay = "enterprise_incident_intelligence_resolution_system.main:replay"
+test = "enterprise_incident_intelligence_resolution_system.main:test"
+run_with_trigger = "enterprise_incident_intelligence_resolution_system.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+
+[tool.uv]
+override-dependencies = ["litellm<=1.82.6"]

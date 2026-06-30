@@ -1,0 +1,7 @@
+2026-06-29T08:02:11Z ERROR auth-service HikariPool-1 Connection is not available request timed out after 30000ms
+2026-06-29T08:02:14Z ERROR account-summary-service PSQLException FATAL remaining connection slots are reserved for SUPERUSER
+2026-06-29T08:02:19Z WARN  pgbouncer-prod pool northwind_app too many connections 398/400 active
+2026-06-29T08:04:47Z ERROR postgres-primary duration 28491ms SELECT accounts JOIN transactions customer_id ORDER BY posted_at DESC LIMIT 500
+2026-06-29T08:08:15Z INFO  on-call-dba active_connections=412 max_connections=400
+2026-06-29T08:16:18Z INFO  on-call-dba terminated PID 1849201 long-running SELECT runtime 47m
+2026-06-29T08:22:10Z INFO  api-gateway 503 rate decreasing 68% to 41%

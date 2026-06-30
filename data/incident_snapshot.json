@@ -1,0 +1,23 @@
+{
+  "incident_id": "INC-2026-0847",
+  "title": "Customer Portal HTTP 503 — database connection pool exhaustion",
+  "severity": "P1",
+  "category": "infra",
+  "opened_at": "2026-06-29T08:14:22Z",
+  "affected_systems": [
+    "customer-portal-api",
+    "auth-service",
+    "account-summary-service",
+    "postgres-primary-prod",
+    "pgbouncer-prod",
+    "api-gateway-prod"
+  ],
+  "symptoms": [
+    "HTTP 503 on login and account summary endpoints",
+    "PostgreSQL connection slots exhausted",
+    "Long-running SELECT holding connections 47+ minutes"
+  ],
+  "customers_impacted_estimate": 2100000,
+  "payment_success_rate_pct": 41,
+  "portal_error_rate_pct": 68
+}

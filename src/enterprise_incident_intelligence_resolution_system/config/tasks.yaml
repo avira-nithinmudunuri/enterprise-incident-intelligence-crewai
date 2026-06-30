@@ -1,0 +1,110 @@
+---
+incident_triage:
+  description: Analyze the incident ticket {incident_ticket} and affected systems
+    {affected_systems}. Determine severity level (P1–P4), classify the issue category
+    (infra, app, security, network, or data), identify all impacted components and
+    blast radius, assess initial business impact against {business_context}, and assign
+    a confidence score (0–100) to each classification decision. Produce a detailed
+    reasoning trace explaining each decision.
+  expected_output: 'A structured JSON object containing: `incident_id`, `severity`
+    (P1–P4), `category` (infra/app/security/network/data), `affected_systems[]`, `blast_radius`
+    (description of scope), `initial_business_impact` (narrative), `triage_confidence_score`
+    (0–100), `recommended_response_team[]` (list of roles), `escalation_required`
+    (bool), `triage_timestamp` (ISO 8601), and `reasoning_trace` (step-by-step decision
+    log).'
+  agent: senior_it_incident_triage_specialist
+  async_execution: true
+log_analysis_and_anomaly_detection:
+  description: Analyze {log_data} from the affected systems {affected_systems}. Detect
+    error patterns, anomalies, failure spikes, and timeline of events. Extract stack
+    traces, identify cascading failure chains, correlate event timestamps, and flag
+    any security-relevant anomalies. Classify each anomaly by type and severity. Produce
+    a complete event timeline reconstructed from log evidence.
+  expected_output: 'A structured JSON object containing: `analysis_timestamp` (ISO
+    8601), `error_patterns[]` (each with `pattern`, `frequency`, `first_seen`, `last_seen`,
+    `severity`), `anomalies[]` (each with `type`, `description`, `timestamp`, `affected_component`),
+    `event_timeline[]` (chronological list of significant events), `impacted_components[]`,
+    `suspected_failure_origin` (component name and rationale), `log_confidence_score`
+    (0–100), and `raw_evidence_snippets[]` (key log lines supporting findings).'
+  agent: enterprise_log_analysis_and_anomaly_detection_engineer
+  async_execution: true
+knowledge_retrieval_and_runbook_search:
+  description: Using the triage classification and category from the incident triage
+    output, search internal knowledge bases via RAG, historical incident records,
+    vendor documentation, CVE databases, and technical runbooks for incidents matching
+    the current scenario. Retrieve the top 5 most relevant historical incidents and
+    associated resolution patterns. Search for any vendor advisories or known issues
+    matching the affected systems and symptoms.
+  expected_output: 'A structured JSON object containing: `retrieved_incidents[]` (each
+    with `incident_id`, `similarity_score` (0–100), `resolution_summary`, `time_to_resolve`),
+    `relevant_runbooks[]` (each with `runbook_name`, `applicability_score`, `key_steps[]`),
+    `vendor_advisories[]` (each with `advisory_id`, `vendor`, `description`, `affected_versions`),
+    `known_workarounds[]`, `knowledge_confidence_score` (0–100), and `retrieval_reasoning_trace`.'
+  agent: enterprise_knowledge_base_and_runbook_retrieval_specialist
+  context:
+  - incident_triage
+root_cause_analysis:
+  description: Correlate all findings from the incident triage, log analysis, and
+    knowledge retrieval tasks. Construct a causal chain from the evidence. Produce
+    a ranked list of root cause hypotheses with probability scores and supporting
+    evidence. Assess the full business impact (revenue, SLA, customer, regulatory)
+    against {business_context}. Include a detailed reasoning trace documenting how
+    each hypothesis was evaluated and why the primary root cause was selected.
+  expected_output: 'A structured JSON object containing: `rca_timestamp` (ISO 8601),
+    `root_cause_hypotheses[]` (each with `hypothesis`, `probability_score` (0–100),
+    `supporting_evidence[]`, `causal_chain` (narrative description)), `primary_root_cause`
+    (the highest-probability hypothesis with full justification), `contributing_factors[]`,
+    `business_impact_assessment` (with `revenue_impact`, `sla_breach` (bool + details),
+    `customers_affected` (estimate), `regulatory_risk` (narrative)), `rca_confidence_score`
+    (0–100), and `reasoning_trace`.'
+  agent: principal_root_cause_analysis_engineer
+  context:
+  - incident_triage
+  - log_analysis_and_anomaly_detection
+  - knowledge_retrieval_and_runbook_search
+solution_recommendation_and_remediation_plan:
+  description: 'Based on the confirmed root cause and business impact from the RCA
+    task, generate a full remediation plan across three horizons: (1) immediate mitigation
+    actions (executable within 1 hour), (2) short-term fixes (completable within 24
+    hours), and (3) long-term preventive actions (strategic investments). Each action
+    must include owner role, estimated effort, risk level (low/medium/high), and measurable
+    success criteria. Also define a rollback plan in case remediation causes further
+    issues.'
+  expected_output: 'A structured JSON object containing: `recommendation_timestamp`
+    (ISO 8601), `immediate_actions[]` (each with `action`, `owner_role`, `effort_estimate`,
+    `risk_level`, `success_criteria`), `short_term_fixes[]` (same schema), `long_term_preventive_actions[]`
+    (same schema), `rollback_plan` (step-by-step rollback procedure), `recommendation_confidence_score`
+    (0–100), `dashboard_payload` (JSON-ready summary object for BI/monitoring tool
+    integration with key metrics and status fields), and `next_steps[]` (prioritized
+    list of immediate actions for the on-call team).'
+  agent: enterprise_remediation_and_resilience_architect
+  context:
+  - root_cause_analysis
+executive_incident_report:
+  description: Synthesize all investigation outputs from every preceding task — triage,
+    log analysis, knowledge retrieval, root cause analysis, and solution recommendations
+    — into three comprehensive deliverables. Reconstruct the full incident timeline
+    from first signal to resolution. Calculate total business impact. Ensure all confidence
+    scores and reasoning traces are included. The final output must be ready for immediate
+    stakeholder distribution and dashboard ingestion.
+  expected_output: |-
+    A single, well-structured Markdown document with three clearly delineated sections:
+
+    ## Section 1: Technical Incident Report
+    Full incident timeline (with timestamps), log evidence summary, root cause causal chain, technical recommendations, confidence scores per finding, and reasoning traces from all agents.
+
+    ## Section 2: Executive Summary
+    Business impact summary (revenue, SLA status, customers affected), severity justification, current resolution status, and exactly 3 key takeaways for leadership. Written in plain business language, no jargon.
+
+    ## Section 3: Lessons Learned & Process Improvements
+    What failed, what worked well, process gaps identified, recommended runbook updates, and preventive investments with estimated ROI.
+
+    ---
+    Appended at the end: a fenced `dashboard_integration_payload` JSON code block containing all structured data (triage JSON, log analysis JSON, RCA JSON, remediation JSON) formatted for ingestion by BI tools or monitoring dashboards.
+  agent: enterprise_incident_communications_and_reporting_director
+  context:
+  - incident_triage
+  - log_analysis_and_anomaly_detection
+  - knowledge_retrieval_and_runbook_search
+  - root_cause_analysis
+  - solution_recommendation_and_remediation_plan
