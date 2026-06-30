@@ -9,3 +9,8 @@ Thumbs.db
 dist/
 build/
 .crewai/
+
+# Generated presentation outputs (regenerate with crewai run)
+report.pdf
+report.html
+report.md

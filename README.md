@@ -2,7 +2,9 @@
 
 Multi-agent [CrewAI](https://crewai.com) pipeline that autonomously triages IT incidents, analyzes logs, retrieves runbooks, performs root-cause analysis, and generates executive-ready PDF reports.
 
-**Demo scenario:** [INC-2026-0847](report.pdf) — Northwind Financial customer portal P1 outage (database connection pool exhaustion, ~2.1M customers affected).
+**Demo scenario:** INC-2026-0847 — Northwind Financial customer portal P1 outage (database connection pool exhaustion, ~2.1M customers affected).
+
+**[workflow.html](workflow.html)** — Visual diagram of the six-agent pipeline.
 
 ## What it does
 
@@ -17,13 +19,13 @@ Six AI agents run in a coordinated incident-response workflow:
 | 5 | Remediation & Resilience Architect | Immediate, 24h, and long-term action plans |
 | 6 | Communications & Reporting Director | Executive report (Markdown, HTML, PDF) |
 
-## Sample output
+## Outputs
 
-Open **[report.pdf](report.pdf)** for a presentation-ready incident briefing (cover page, KPIs, timeline, RCA, remediation plan).
+Running `crewai run` generates incident reports locally (not committed to the repo):
 
 | File | Description |
 |------|-------------|
-| `report.pdf` | PDF for leadership / portfolio demos |
+| `report.pdf` | PDF for leadership briefings |
 | `report.html` | Styled web document |
 | `report.md` | Markdown source report |
 
@@ -38,7 +40,7 @@ Open **[report.pdf](report.pdf)** for a presentation-ready incident briefing (co
 ### Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/enterprise-incident-intelligence-crewai.git
+git clone https://github.com/avira-nithinmudunuri/enterprise-incident-intelligence-crewai.git
 cd enterprise-incident-intelligence-crewai
 
 cp .env.example .env
@@ -78,7 +80,7 @@ uv run python -m enterprise_incident_intelligence_resolution_system.report_build
 │       ├── demo_inputs.py   # Realistic demo scenario
 │       ├── main.py          # Entry point
 │       └── report_builder.py # HTML/PDF report generator
-├── report.pdf               # Sample output
+├── workflow.html            # Visual agent pipeline diagram
 ├── .env.example
 └── pyproject.toml
 ```
@@ -102,27 +104,3 @@ uv run python -m enterprise_incident_intelligence_resolution_system.report_build
 ## License
 
 MIT
-
-## Publish to GitHub
-
-```powershell
-cd enterprise_incident_intelligence_resolution_system_v1_crewai-project
-
-git init
-git add .
-git status                    # confirm .env is NOT listed
-git commit -m "Initial commit: CrewAI enterprise incident intelligence system"
-
-# Create repo on github.com/new, then:
-git remote add origin https://github.com/YOUR_USERNAME/enterprise-incident-intelligence-crewai.git
-git branch -M main
-git push -u origin main
-```
-
-**GitHub repo description (paste in repo settings):**
-
-> Multi-agent CrewAI system that autonomously triages IT incidents, analyzes logs, retrieves runbooks, performs root-cause analysis, and generates executive PDF reports.
-
-**Topics:** `crewai` `multi-agent` `incident-response` `root-cause-analysis` `gemini` `ai-agents` `devops` `sre`
-
-> **Security:** Never commit `.env`. Rotate any API keys that were shared or exposed before publishing.
